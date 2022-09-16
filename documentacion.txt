@@ -1,5 +1,17 @@
+// Instalar mongoose
+
 //para variables de entorno
 npm i dotenv
 
 //para cors
 npm i cors
+
+//para validaciones
+npm i express-validator
+
+//para encriptar contraseñas
+npm i bcryptjs
+
+
+//para generar jwt
+npm i jsonwebtoken
