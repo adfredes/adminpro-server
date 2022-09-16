@@ -1,0 +1,5 @@
+//para variables de entorno
+npm i dotenv
+
+//para cors
+npm i cors
