@@ -15,3 +15,10 @@ npm i bcryptjs
 
 //para generar jwt
 npm i jsonwebtoken
+
+
+//para subir imagenes
+npm i express-fileupload
+
+//generar id unicos
+npm i uuid
