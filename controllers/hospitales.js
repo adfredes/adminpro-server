@@ -1,4 +1,4 @@
-const { response } = require('express');
+const { response, request } = require('express');
 
 const Hospital = require('../models/hospital');
 
@@ -42,20 +42,74 @@ const crearHospital = async(req, res = response) => {
 
 };
 
-const actualizarHospital = (req, res = response) => {
+const actualizarHospital = async(req = request, res = response) => {
 
-    res.json({
-        ok: true,
-        msg: 'actualizarHospital'
-    });
+    try {
+
+        const id = req.params.id;
+        const uid = req.uid;
+
+        const hospitalDB = await Hospital.findById(id);
+
+        if (!hospitalDB) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'No existe un hospital con ese id'
+            });
+        }
+
+        //hospitalDB.nombre = req.body.nombre;
+        const cambiosHospitales = {
+            ...req.body,
+            usuario: uid
+        };
+
+        const hospitalActualizado = await Hospital.findByIdAndUpdate(id, cambiosHospitales, { new: true });
+
+
+
+        res.json({
+            ok: true,
+            hospital: hospitalActualizado
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            ok: false,
+            msg: 'Hable con el administrador'
+        });
+    }
 };
 
-const borrarHospital = (req, res = response) => {
+const borrarHospital = async(req, res = response) => {
 
-    res.json({
-        ok: true,
-        msg: 'borrarHospital'
-    });
+    try {
+
+        const id = req.params.id;
+
+        const hospitalDB = await Hospital.findById(id);
+
+        if (!hospitalDB) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'No existe un hospital con ese id'
+            });
+        }
+
+        await Hospital.findByIdAndDelete(id);
+
+
+        res.json({
+            ok: true,
+            msg: 'Hospital eliminado'
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            ok: false,
+            msg: 'Hable con el administrador'
+        });
+    }
 };
 
 

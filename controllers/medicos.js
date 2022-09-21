@@ -52,7 +52,49 @@ const crearMedico = async(req, res = response) => {
 
 };
 
-const actualizarMedico = (req, res = response) => {
+const actualizarMedico = async(req, res = response) => {
+
+    try {
+        const id = req.params.id;
+        const uid = req.uid;
+
+        const medicoDB = await Medico.findById(id);
+
+        if (!medicoDB) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'No existe un medico con ese id'
+            });
+        }
+
+        const hospitalDB = await Hospital.findById(req.hospital);
+
+        if (!hospitalDB) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'Hospital no encontrado por id'
+            });
+        }
+
+        const cambiosMedico = {
+            ...req.body,
+            usuario: uid
+        };
+
+        const medicoActualizado = await Medico.findByIdAndUpdate(id, cambiosMedico, { new: true });
+
+        return res.json({
+            ok: true,
+            medico: medicoActualizado
+        });
+
+
+    } catch (error) {
+        return res.status(500).json({
+            ok: false,
+            msg: 'Hable con el administrador'
+        });
+    }
 
     res.json({
         ok: true,
@@ -60,12 +102,34 @@ const actualizarMedico = (req, res = response) => {
     });
 };
 
-const borrarMedico = (req, res = response) => {
+const borrarMedico = async(req, res = response) => {
 
-    res.json({
-        ok: true,
-        msg: 'borrarMedico'
-    });
+    try {
+        const id = req.params.id;
+
+        const medicoDB = await Medico.findById(id);
+
+        if (!medicoDB) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'No existe un medico con ese id'
+            });
+        }
+
+        await Medico.findByIdAndDelete(id);
+
+        res.json({
+            ok: true,
+            msg: 'Medico eliminado'
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            ok: false,
+            msg: 'Hable con el administrador'
+        });
+    }
+
 };
 
 
