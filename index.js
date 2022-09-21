@@ -12,12 +12,16 @@ const app = express();
 // CORS middleware
 app.use(cors());
 
+
+// Carpeta Publica
+app.use(express.static('public'));
+
 // Lectura y parseo del body
 app.use(express.json());
 
 
 // Base de datos
-dbConnection();
+//dbConnection();
 
 // Ruta de la app
 app.use('/api/usuarios', require('./routes/usuarios'));
