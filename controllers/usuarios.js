@@ -91,6 +91,12 @@ const actualizarUsuario = async(req, res = response) => {
 
         if (usuarioDB.email !== campos.email) {
 
+            if (usuarioDB.google) {
+                return res.status(400).json({
+                    ok: false,
+                    msg: 'Los usuarios de google no pueden cambiar su correo'
+                });
+            }
 
             const existeEmail = await Usuario.findOne({ email: req.body.email });
 
@@ -103,9 +109,8 @@ const actualizarUsuario = async(req, res = response) => {
 
         }
 
-        const usuarioActualizado = await Usuario.findByIdAndUpdate(uid, campos, { new: true });
 
-        await usuario.save();
+        const usuarioActualizado = await Usuario.findByIdAndUpdate(uid, campos, { new: true });
 
 
         return res.json({

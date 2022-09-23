@@ -82,7 +82,7 @@ const googleSignIn = async(req, res = response) => {
             email,
             name,
             picture,
-            jwtToken
+            token: jwtToken
         });
 
     } catch (error) {
@@ -102,9 +102,16 @@ const renewToken = async(req, res = response) => {
     // Generar el TOKEN - JWT
     const jwtToken = await generarJWT(uid);
 
+    // obtener el usuario por uid
+
+    const usuario = await Usuario.findById(uid);
+
+
+
     res.json({
         ok: true,
-        jwtToken
+        token: jwtToken,
+        usuario
     });
 };
 

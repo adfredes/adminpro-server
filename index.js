@@ -21,7 +21,7 @@ app.use(express.json());
 
 
 // Base de datos
-//dbConnection();
+dbConnection();
 
 // Ruta de la app
 app.use('/api/usuarios', require('./routes/usuarios'));
